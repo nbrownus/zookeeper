@@ -24,6 +24,8 @@
 # Short-Description:	Apache ZooKeeper server
 ### END INIT INFO
 
+DEFAULT=/etc/default/zookeeper
+
 set -e
 
 # /etc/init.d/zookeeper: start and stop the Apache ZooKeeper daemon
@@ -36,6 +38,10 @@ umask 022
 
 ZOOPIDDIR=/var/lib/zookeeper/data
 ZOOPIDFILE=${ZOOPIDDIR}/zookeeper_server.pid
+
+if [ -f "$DEFAULT" ]; then
+    . "$DEFAULT"
+fi
 
 check_privsep_dir() {
     # Create the PrivSep empty dir if necessary
