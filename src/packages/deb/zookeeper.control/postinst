@@ -14,14 +14,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+set -e
 
-getent group hadoop 2>/dev/null >/dev/null || /usr/sbin/groupadd -r hadoop
+if ! getent group hadoop >/dev/null; then
+    addgroup --system hadoop
+fi
 
-adduser --system --home /usr/share/zookeeper --no-create-home --ingroup hadoop --disabled-password --shell /bin/false zookeeper
-
-bash /usr/sbin/update-zookeeper-env.sh \
-  --prefix=/usr \
-  --conf-dir=/etc/zookeeper \
-  --log-dir=/var/log/zookeeper \
-  --pid-dir=/var/run/zookeeper \
-  --var-dir=/var/lib/zookeeper
+if ! getent passwd zookeeper >/dev/null; then
+    adduser --quiet --system --ingroup hadoop --disabled-login --disabled-password --home /var/lib/zookeeper --no-create-home zookeeper
+fi
