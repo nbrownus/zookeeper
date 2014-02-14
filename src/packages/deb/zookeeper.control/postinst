@@ -15,6 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+getent group hadoop 2>/dev/null >/dev/null || /usr/sbin/groupadd -r hadoop
+
+adduser --system --home /usr/share/zookeeper --no-create-home --ingroup hadoop --disabled-password --shell /bin/false zookeeper
+
 bash /usr/sbin/update-zookeeper-env.sh \
   --prefix=/usr \
   --conf-dir=/etc/zookeeper \
